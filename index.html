@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prime Factorization: Noir & Mixy Magic Academy</title>
+  <meta name="description" content="เรียนรู้การแยกตัวประกอบเฉพาะ (Prime Factorization) แบบอินเตอร์แอคทีฟกับพ่อมดน้อยนัวและมิกซี่ พร้อมระบบ 4 เลเวล และโหมดดวลกับ AI">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-magic">
+  <div class="container">
+    
+    <!-- Top Header -->
+    <header>
+      <div class="top-bar">
+        <div class="brand-wrapper">
+          <img src="assets/mascot.jpg" alt="Mascot Noir & Mixy" class="header-mascot-img" id="header-mascot" title="นัว & มิกซี่">
+          <div>
+            <h1 class="main-title" id="app-main-title">
+              ✨ สถาบันเวทมนตร์แห่งตัวเลข <span class="badge-title">Noir & Mixy Magic Academy</span>
+            </h1>
+            <p class="subtitle" id="app-subtitle">ศาสตร์แห่งการสลายผลึกและหลอมอัญมณีธาตุบริสุทธิ์กับพ่อมดน้อยนัว</p>
+          </div>
+        </div>
+
+        <div class="header-controls">
+          <!-- Difficulty Selector -->
+          <div class="difficulty-selector-group" title="เลือกระดับความยากง่าย">
+            <span class="difficulty-label">🎯 ระดับ:</span>
+            <select id="difficulty-select" class="difficulty-select">
+              <option value="easy" selected>🟢 ง่าย (เลข 6-30)</option>
+              <option value="medium">🟡 ปานกลาง (เลข 32-100)</option>
+              <option value="hard">🔴 ท้าทาย (เลข 100-360)</option>
+            </select>
+          </div>
+
+          <!-- Smart Hint Button -->
+          <button id="btn-smart-hint" class="btn-hint-main" title="ขอคำใบ้จากมิกซี่">
+            💡 ขอคำใบ้
+          </button>
+
+          <!-- Sound Toggle -->
+          <button id="sound-toggle-btn" class="btn-sound-toggle" title="เปิด/ปิดเสียง">
+            🔊 เสียง: เปิด
+          </button>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle-btn" class="btn-theme-toggle" title="สลับโหมดเวทมนตร์ / วิทยาศาสตร์">
+            🪄 โหมดเวทมนตร์ (สลับเป็น Sci-Fi)
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" role="tablist">
+        <button class="nav-tab active" data-level="0" id="tab-lvl-0">
+          <span class="tab-title">📖 Level 0: ปฐมบท & วิธีเล่น</span>
+        </button>
+        <button class="nav-tab" data-level="1" id="tab-lvl-1">
+          <span class="tab-title">🛡️ Level 1: ค้นหาธาตุบริสุทธิ์</span>
+        </button>
+        <button class="nav-tab" data-level="2" id="tab-lvl-2">
+          <span class="tab-title">⚡ Level 2: มนตราผ่าผลึก</span>
+        </button>
+        <button class="nav-tab" data-level="3" id="tab-lvl-3">
+          <span class="tab-title">💎 Level 3: แท่นหลอมเลขยกกำลัง</span>
+        </button>
+        <button class="nav-tab" data-level="4" id="tab-lvl-4">
+          <span class="tab-title">🏆 Level 4: การนำไปใช้จริง & ดวล AI</span>
+        </button>
+        <button class="nav-tab" data-level="sandbox" id="tab-lvl-sandbox">
+          <span class="tab-title">🔮 โหมดร่ายเวทย์อิสระ</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- AI Companion Interactive Dialogue Box -->
+    <aside class="ai-companion-bar" aria-label="AI Assistant Dialogue">
+      <div class="ai-avatar-wrapper">
+        <img src="assets/mascot.jpg" alt="Avatar Noir & Mixy" class="ai-mascot-thumb">
+        <div class="ai-pipo-badge">🐭</div>
+      </div>
+      <div class="ai-content">
+        <div class="ai-name-row">
+          <div class="ai-name" id="ai-companion-name">นัว & มิกซี่ (Noir & Mixy 🧙‍♂️🐭)</div>
+        </div>
+        <div class="ai-dialogue" id="ai-dialogue-text">
+          สวัสดีจ้า! เราคือ นัว พ่อมดน้อย และ มิกซี่ หนูเวทมนตร์คู่หู ข้าจะคอยแนะนำเวทมนตร์ตัวเลขและส่งคำใบ้ช่วยเจ้าเอง!
+        </div>
+      </div>
+    </aside>
+
+    <!-- ==================== MAIN SCREENS ==================== -->
+    <main>
+
+      <!-- ==================== LEVEL 0: Tutorial & Story ==================== -->
+      <section class="level-screen active" data-level="0" id="screen-level-0">
+        <div class="card">
+          <h2 class="card-title">
+            <span>✨</span> ปฐมบท: ทำความรู้จัก "การแยกตัวประกอบเฉพาะ (Prime Factorization)"
+          </h2>
+
+          <div class="hero-tutorial-grid">
+            <!-- Left: Tutorial Steps -->
+            <div>
+              <div class="tutorial-step-card">
+                <div class="tutorial-step-title"><span>1️⃣</span> จำนวนเฉพาะ (Prime Number) คืออะไร?</div>
+                <p style="font-size: 0.95rem; color: var(--text-color);">
+                  คือจำนวนที่ <strong>"ไม่มีเลขอื่นใดหารมันลงตัวเลย นอกจาก 1 กับตัวมันเอง"</strong> เช่น <strong>2, 3, 5, 7, 11, 13</strong>... เปรียบเหมือน <em>"อัญมณีธาตุบริสุทธิ์"</em> หรือ <em>"อะตอม"</em> ที่แข็งแกร่งที่สุด ไม่สามารถผ่าแยกได้อีกแล้ว!
+                </p>
+              </div>
+
+              <div class="tutorial-step-card">
+                <div class="tutorial-step-title"><span>2️⃣</span> การแยกตัวประกอบ (Prime Factorization) คืออะไร?</div>
+                <p style="font-size: 0.95rem; color: var(--text-color);">
+                  คือการเขียนตัวเลขให้อยู่ในรูป <strong>"ผลคูณของจำนวนเฉพาะเท่านั้น"</strong> เช่น:<br>
+                  • $12 = 2 \times 2 \times 3 = 2^2 \times 3$<br>
+                  • $60 = 2 \times 2 \times 3 \times 5 = 2^2 \times 3 \times 5$
+                </p>
+              </div>
+
+              <div class="tutorial-step-card">
+                <div class="tutorial-step-title"><span>3️⃣</span> เคล็ดลับการร่ายเวทย์ผ่าผลึกง่ายๆ</div>
+                <p style="font-size: 0.95rem; color: var(--text-color);">
+                  ให้เริ่มนำจำนวนเฉพาะตัวเล็กสุด (เช่น <strong>2</strong> ถ้าเป็นเลขคู่ หรือ <strong>3</strong> ถ้าบวกเลขโดดแล้วหาร 3 ลงตัว) มาหารไปเรื่อยๆ จนเหลือ 1!
+                </p>
+              </div>
+            </div>
+
+            <!-- Right: Mascot Hero Card & Practice Area -->
+            <div class="mascot-hero-card">
+              <img src="assets/mascot.jpg" alt="Mascot Noir and Mixy" class="mascot-hero-img" id="l0-mascot-img">
+              <div class="mascot-hero-caption">🧙‍♂️ นัว & มิกซี่ คู่หูจอมเวทย์แห่งตัวเลข</div>
+              <div id="l0-practice-area" style="width: 100%;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== LEVEL 1: Prime vs Composite ==================== -->
+      <section class="level-screen" data-level="1" id="screen-level-1">
+        <div class="card">
+          <div class="l2-top-bar">
+            <h2 class="card-title">
+              <span>🛡️</span> บททดสอบที่ 1: จำแนกธาตุบริสุทธิ์ vs แร่ผสม (Prime vs Composite)
+            </h2>
+            <button class="btn-random-quest" onclick="window.levelManager.randomizeCurrentLevelQuest()">
+              🎲 สุ่มผลึกใหม่
+            </button>
+          </div>
+
+          <div class="l1-game-area">
+            <div class="l1-stats-row">
+              <div class="stat-item">คะแนนสะสม: <strong id="l1-score">0</strong>/6</div>
+              <div class="stat-item">คอมโบต่อเนื่อง: <strong id="l1-streak">0</strong> 🔥</div>
+            </div>
+            <div class="progress-track" style="max-width: 500px;">
+              <div class="progress-fill" id="l1-progress-bar"></div>
+            </div>
+
+            <!-- Target Floating Element Card -->
+            <div id="l1-target-item" class="element-card floating">
+              <div class="element-inner">
+                <span class="element-tag">ผลึกมนตรา</span>
+                <span class="element-value">12</span>
+              </div>
+            </div>
+
+            <div id="l1-feedback">
+              <div class="hint-text">🔮 จงเลือกว่าผลึกนี้คือ "ธาตุบริสุทธิ์ (จำนวนเฉพาะ)" หรือ "แร่ผสม (จำนวนประกอบ)"</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="l1-action-buttons">
+              <button id="l1-btn-prime" class="btn-choice btn-prime">
+                <span>✨</span> ธาตุบริสุทธิ์ (จำนวนเฉพาะ Prime)
+              </button>
+              <button id="l1-btn-composite" class="btn-choice btn-composite">
+                <span>💥</span> แร่ผสม (จำนวนประกอบ Composite)
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== LEVEL 2: Step-by-step Slicing & Factor Tree ==================== -->
+      <section class="level-screen" data-level="2" id="screen-level-2">
+        <div class="card">
+          <div class="l2-top-bar">
+            <h2 class="card-title">
+              <span>⚡</span> บททดสอบที่ 2: ศาสตร์การผ่าสลายผลึก (Factor Tree Slicing)
+            </h2>
+            <div class="target-select-wrapper">
+              <label for="l2-target-select">เลือกตัวเลขเป้าหมาย:</label>
+              <select id="l2-target-select" class="custom-select"></select>
+              <button class="btn-random-quest" onclick="window.levelManager.randomizeCurrentLevelQuest()">
+                🎲 สุ่มโจทย์ใหม่
+              </button>
+            </div>
+          </div>
+
+          <!-- Factor Tree Canvas SVG -->
+          <div class="tree-container">
+            <svg id="l2-tree-svg" class="tree-svg"></svg>
+          </div>
+
+          <!-- Collected Runes / Atoms -->
+          <div class="collected-box">
+            <span><strong>อัญมณีธาตุที่แยกได้:</strong></span>
+            <div id="l2-collected-factors"></div>
+          </div>
+
+          <!-- Weapon Shelves -->
+          <div class="weapon-shelf">
+            <button class="prime-weapon-btn" data-prime="2" id="weapon-2"><span>🔥</span> [2]</button>
+            <button class="prime-weapon-btn" data-prime="3" id="weapon-3"><span>💧</span> [3]</button>
+            <button class="prime-weapon-btn" data-prime="5" id="weapon-5"><span>💨</span> [5]</button>
+            <button class="prime-weapon-btn" data-prime="7" id="weapon-7"><span>🌱</span> [7]</button>
+            <button class="prime-weapon-btn" data-prime="11" id="weapon-11"><span>⚡</span> [11]</button>
+            <button class="prime-weapon-btn" data-prime="13" id="weapon-13"><span>🌟</span> [13]</button>
+            <button class="prime-weapon-btn" data-prime="17" id="weapon-17"><span>🔮</span> [17]</button>
+            <button class="prime-weapon-btn" data-prime="19" id="weapon-19"><span>✨</span> [19]</button>
+          </div>
+
+          <div id="l2-feedback"></div>
+        </div>
+      </section>
+
+      <!-- ==================== LEVEL 3: Exponent Condenser ==================== -->
+      <section class="level-screen" data-level="3" id="screen-level-3">
+        <div class="card">
+          <div class="l2-top-bar">
+            <h2 class="card-title">
+              <span>💎</span> บททดสอบที่ 3: แท่นควบแน่นสูตรเลขยกกำลัง (Arcane Condenser)
+            </h2>
+            <div class="target-select-wrapper">
+              <label for="l3-target-select">เลือกตัวเลขทดลอง:</label>
+              <select id="l3-target-select" class="custom-select"></select>
+              <button class="btn-random-quest" onclick="window.levelManager.randomizeCurrentLevelQuest()">
+                🎲 สุ่มโจทย์ใหม่
+              </button>
+            </div>
+          </div>
+
+          <div class="l3-raw-box" id="l3-raw-equation">
+            12 = 2 &times; 2 &times; 3
+          </div>
+
+          <!-- Fusion Slots Grid -->
+          <div class="fusion-grid" id="l3-fusion-slots"></div>
+
+          <!-- Final Formula Result -->
+          <div class="formula-result-card" id="l3-exponent-formula">
+            12 = 2<sup>2</sup> &times; 3
+          </div>
+
+          <div id="l3-feedback"></div>
+        </div>
+      </section>
+
+      <!-- ==================== LEVEL 4: Applications & AI Duel ==================== -->
+      <section class="level-screen" data-level="4" id="screen-level-4">
+        <div class="card">
+          <div class="l2-top-bar">
+            <h2 class="card-title">
+              <span>🏆</span> บททดสอบที่ 4: การนำไปใช้จริง & ดวลเวทย์กับ AI
+            </h2>
+            <div class="sub-tabs">
+              <button class="sub-tab active" id="l4-tab-venn">ภารกิจที่ 1: หม้อปรุงยา ห.ร.ม. & ค.ร.น.</button>
+              <button class="sub-tab" id="l4-tab-rsa">ภารกิจที่ 2: ระบบถอดรหัสลับ RSA</button>
+              <button class="sub-tab" id="l4-tab-duel">⚔️ ภารกิจที่ 3: ดวลเวทย์กับ AI</button>
+            </div>
+          </div>
+
+          <!-- Sub 1: Venn Section -->
+          <div id="l4-venn-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+              <div>
+                <strong>ตัวเลขคู่เปรียบเทียบ:</strong> 
+                <span class="badge-title" style="font-size: 1.1rem; color: #3b82f6;" id="l4-num-a">12</span> 
+                และ 
+                <span class="badge-title" style="font-size: 1.1rem; color: #ec4899;" id="l4-num-b">18</span>
+              </div>
+              <button class="btn btn-primary btn-sm" id="btn-next-venn">🎲 สุ่มคู่ตัวเลขถัดไป ➔</button>
+            </div>
+
+            <!-- Venn Diagram Visualization -->
+            <div class="venn-diagram-wrapper">
+              <div class="venn-circle venn-left">
+                <div class="venn-region" id="venn-only-a"></div>
+              </div>
+              <div class="venn-center-region" id="venn-common"></div>
+              <div class="venn-circle venn-right">
+                <div class="venn-region" id="venn-only-b"></div>
+              </div>
+            </div>
+
+            <!-- Results Grid -->
+            <div class="venn-results-grid">
+              <div class="result-card">
+                <div id="l4-gcd-result">
+                  <strong>ห.ร.ม. (GCD - ส่วนร่วมตรงกลาง):</strong> 
+                  <span class="highlight-val">6</span>
+                </div>
+                <div class="hint-text">คูณเฉพาะอัญมณี/อะตอมที่อยู่ตรงกลางที่ซ้ำกัน</div>
+              </div>
+              <div class="result-card">
+                <div id="l4-lcm-result">
+                  <strong>ค.ร.น. (LCM - รวมทั้งหมด):</strong> 
+                  <span class="highlight-val">36</span>
+                </div>
+                <div class="hint-text">คูณอัญมณี/อะตอมทุกตัวในวงกลมทั้งสอง</div>
+              </div>
+            </div>
+
+            <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">
+              <div>• องค์ประกอบ A (<span id="l4-factors-a"></span>)</div>
+              <div>• องค์ประกอบ B (<span id="l4-factors-b"></span>)</div>
+            </div>
+          </div>
+
+          <!-- Sub 2: RSA Section -->
+          <div id="l4-rsa-section" style="display: none;">
+            <div class="rsa-controls">
+              <div class="rsa-input-group">
+                <label for="rsa-prime-p">เลือก Prime ตัวที่ 1 (<i>p</i>):</label>
+                <select id="rsa-prime-p" class="custom-select">
+                  <option value="3">3</option>
+                  <option value="5">5</option>
+                  <option value="7" selected>7</option>
+                  <option value="11">11</option>
+                  <option value="13">13</option>
+                  <option value="17">17</option>
+                  <option value="19">19</option>
+                </select>
+              </div>
+              <div class="rsa-input-group">
+                <label for="rsa-prime-q">เลือก Prime ตัวที่ 2 (<i>q</i>):</label>
+                <select id="rsa-prime-q" class="custom-select">
+                  <option value="5">5</option>
+                  <option value="7">7</option>
+                  <option value="11" selected>11</option>
+                  <option value="13">13</option>
+                  <option value="17">17</option>
+                  <option value="19">19</option>
+                  <option value="23">23</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" id="btn-update-rsa">⚡ สร้างกุญแจความปลอดภัย</button>
+            </div>
+
+            <div class="formula-result-card" style="margin-bottom: 1.5rem;">
+              แม่กุญแจดิจิทัล <i>N = p &times; q</i> : <span id="rsa-calc-step">7 &times; 11 = 77</span>
+            </div>
+
+            <div id="rsa-explanation"></div>
+          </div>
+
+          <!-- Sub 3: AI Friendly Duel Section -->
+          <div id="l4-duel-section" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+              <p style="font-size: 0.95rem; margin: 0;">
+                ⚔️ ดวลความเร็วสลายผลึกกับมิกซี่ AI! เลือกยิง Rune ด้านล่างให้พลังเหลือ 1 ก่อนมิกซี่!
+              </p>
+              <button class="btn btn-primary btn-sm" id="btn-new-duel">🎲 เริ่มรอบใหม่</button>
+            </div>
+
+            <div class="duel-arena">
+              <!-- Player Card -->
+              <div class="duel-combatant-card player-card">
+                <div class="combatant-avatar">🧙‍♂️</div>
+                <div class="combatant-name" style="color: #10b981;">จอมเวทย์น้อย (คุณ)</div>
+                <div class="hp-bar-track">
+                  <div class="hp-fill" id="duel-player-hp" style="width: 0%;"></div>
+                </div>
+                <div>พลังงานผลึกที่เหลือ:</div>
+                <div class="duel-target-display" id="duel-player-target">24</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">อัญมณีที่ได้:</div>
+                <div id="duel-player-factors" style="margin-top: 0.4rem;"></div>
+              </div>
+
+              <!-- AI Card -->
+              <div class="duel-combatant-card ai-card">
+                <div class="combatant-avatar">🐭</div>
+                <div class="combatant-name" style="color: #3b82f6;">มิกซี่ (AI คู่หู)</div>
+                <div class="hp-bar-track">
+                  <div class="hp-fill ai-hp" id="duel-ai-hp" style="width: 0%;"></div>
+                </div>
+                <div>พลังงานผลึกที่เหลือ:</div>
+                <div class="duel-target-display" id="duel-ai-target">24</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">อัญมณีที่ได้:</div>
+                <div id="duel-ai-factors" style="margin-top: 0.4rem;"></div>
+              </div>
+            </div>
+
+            <!-- Slice Weapons for Duel -->
+            <div style="margin-top: 1.2rem; text-align: center;">
+              <div class="hint-text">เลือก Rune เพื่อยิงผ่าพลังงานของคุณ:</div>
+              <div class="weapon-shelf">
+                <button class="prime-weapon-btn" data-prime="2">🔥 [2]</button>
+                <button class="prime-weapon-btn" data-prime="3">💧 [3]</button>
+                <button class="prime-weapon-btn" data-prime="5">💨 [5]</button>
+                <button class="prime-weapon-btn" data-prime="7">🌱 [7]</button>
+                <button class="prime-weapon-btn" data-prime="11">⚡ [11]</button>
+                <button class="prime-weapon-btn" data-prime="13">🌟 [13]</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SANDBOX MODE ==================== -->
+      <section class="level-screen" data-level="sandbox" id="screen-sandbox">
+        <div class="card">
+          <h2 class="card-title">
+            <span>🔬</span> ห้องทดลองเสรี (Sandbox Mode) — แยกตัวประกอบตัวเลขใดๆ
+          </h2>
+
+          <div class="sandbox-top-controls">
+            <label for="sandbox-input-num">พิมพ์ตัวเลขที่ต้องการทดสอบ (2 - 9999):</label>
+            <input type="number" id="sandbox-input-num" class="num-input" value="60" min="2" max="9999">
+            <button class="btn btn-primary" id="btn-sandbox-auto">✨ เล่นแอนิเมชันแยกอัตโนมัติ</button>
+            <button class="btn btn-choice" style="padding: 0.5rem 1rem; font-size: 0.9rem;" id="btn-sandbox-reset">🔄 รีเซ็ต</button>
+          </div>
+
+          <!-- Tree SVG -->
+          <div class="tree-container">
+            <svg id="sandbox-tree-svg" class="tree-svg"></svg>
+          </div>
+
+          <div class="collected-box">
+            <span><strong>ตัวประกอบที่ได้:</strong></span>
+            <div id="sandbox-collected"></div>
+          </div>
+
+          <div class="formula-result-card" style="margin-top: 1rem;">
+            <span>รูปเลขยกกำลัง: </span>
+            <span id="sandbox-exp-display">60 = 2<sup>2</sup> &times; 3 &times; 5</span>
+          </div>
+
+          <!-- Manual Slice Weapons -->
+          <div style="margin-top: 1rem; text-align: center;">
+            <div class="hint-text" style="margin-bottom: 0.5rem;">หรือเลือกยิงแยกตัวประกอบด้วยตนเอง:</div>
+            <div class="weapon-shelf">
+              <button class="prime-weapon-btn sandbox-weapon-btn" data-prime="2">⚡ [2]</button>
+              <button class="prime-weapon-btn sandbox-weapon-btn" data-prime="3">💧 [3]</button>
+              <button class="prime-weapon-btn sandbox-weapon-btn" data-prime="5">💨 [5]</button>
+              <button class="prime-weapon-btn sandbox-weapon-btn" data-prime="7">🌱 [7]</button>
+              <button class="prime-weapon-btn sandbox-weapon-btn" data-prime="11">🌟 [11]</button>
+              <button class="prime-weapon-btn sandbox-weapon-btn" data-prime="13">🔮 [13]</button>
+              <button class="prime-weapon-btn sandbox-weapon-btn" data-prime="17">⚡ [17]</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Level Clear Modal with Mascot -->
+    <div class="modal-overlay" id="level-complete-modal">
+      <div class="modal-card">
+        <img src="assets/mascot.jpg" alt="Celebration Mascot" class="modal-mascot-img">
+        <h3 class="modal-title" id="complete-title">🎉 ยินดีด้วย! ผ่านบททดสอบ!</h3>
+        <p class="modal-desc" id="complete-desc">เจ้าได้บรรลุเป้าหมายการเรียนรู้ในระดับนี้แล้ว</p>
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="btn-next-level">ก้าวสู่ระดับถัดไป ➔</button>
+          <button class="btn btn-choice" style="padding: 0.5rem 1rem;" id="modal-close-btn">ปิด</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/mathUtils.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -675,9 +675,64 @@ header {
   justify-content: center;
 }
 
+.tree-container.zoomable {
+  cursor: grab;
+  user-select: none;
+  min-height: 380px;
+}
+
+.tree-container.zoomable:active {
+  cursor: grabbing;
+}
+
 .tree-svg {
   width: 100%;
   height: 100%;
+}
+
+.zoom-hint-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  background: rgba(0,0,0,0.55);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  pointer-events: none;
+  z-index: 5;
+  backdrop-filter: blur(4px);
+}
+
+.zoom-controls {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  display: flex;
+  gap: 4px;
+  z-index: 10;
+}
+
+.zoom-controls button {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: rgba(0,0,0,0.5);
+  color: var(--text-color);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+  backdrop-filter: blur(4px);
+}
+
+.zoom-controls button:hover {
+  background: var(--accent-color);
+  color: #000;
 }
 
 .collected-box {

@@ -558,6 +558,15 @@ class LevelManager {
     const totalHeight = Math.max(320, maxY + 50);
     svg.setAttribute('viewBox', `0 0 ${width} ${totalHeight}`);
 
+    // For sandbox: wrap everything in a zoom-group so JS can transform it
+    const isSandbox = svgId === 'sandbox-tree-svg';
+    const drawTarget = isSandbox ? (() => {
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', 'zoom-group');
+      svg.appendChild(g);
+      return g;
+    })() : svg;
+
     // Draw branch lines
     treeData.forEach(node => {
       if (node.parentId !== null && positions[node.parentId] && positions[node.id]) {
@@ -572,7 +581,7 @@ class LevelManager {
         line.setAttribute('stroke-width', '3');
         line.setAttribute('stroke-linecap', 'round');
         line.setAttribute('stroke-dasharray', node.active ? '4,4' : 'none');
-        svg.appendChild(line);
+        drawTarget.appendChild(line);
       }
     });
 
@@ -611,7 +620,7 @@ class LevelManager {
 
       g.appendChild(circle);
       g.appendChild(text);
-      svg.appendChild(g);
+      drawTarget.appendChild(g);
     });
   }
 
@@ -999,6 +1008,10 @@ class LevelManager {
       { id: 1, parentId: null, value: num, isPrime: MathUtils.isPrime(num), active: true }
     ];
     this.renderSandbox();
+    // Reset pan/zoom view when starting a new number
+    if (window.app && window.app.resetSandboxView) {
+      window.app.resetSandboxView();
+    }
   }
 
   renderSandbox() {

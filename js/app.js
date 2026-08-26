@@ -149,6 +149,107 @@ class App {
     // Modal Close
     const modalClose = document.getElementById('modal-close-btn');
     if (modalClose) modalClose.addEventListener('click', () => this.levelManager.closeModal());
+
+    // Sandbox Zoom & Pan
+    this.setupSandboxZoom();
+  }
+
+  setupSandboxZoom() {
+    const container = document.getElementById('sandbox-tree-container');
+    const svg = document.getElementById('sandbox-tree-svg');
+    if (!container || !svg) return;
+
+    this._sbZoom = 1;
+    this._sbPanX = 0;
+    this._sbPanY = 0;
+    this._sbDragging = false;
+    this._sbDragStart = { x: 0, y: 0 };
+
+    const applyTransform = () => {
+      const g = svg.querySelector('g.zoom-group');
+      if (g) {
+        g.setAttribute('transform', `translate(${this._sbPanX},${this._sbPanY}) scale(${this._sbZoom})`);
+      }
+    };
+
+    // Wheel = Zoom
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? 0.85 : 1.18;
+      this._sbZoom = Math.min(Math.max(this._sbZoom * delta, 0.25), 5);
+      applyTransform();
+    }, { passive: false });
+
+    // Drag = Pan
+    container.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      this._sbDragging = true;
+      this._sbDragStart = { x: e.clientX - this._sbPanX, y: e.clientY - this._sbPanY };
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!this._sbDragging) return;
+      this._sbPanX = e.clientX - this._sbDragStart.x;
+      this._sbPanY = e.clientY - this._sbDragStart.y;
+      applyTransform();
+    });
+
+    window.addEventListener('mouseup', () => { this._sbDragging = false; });
+
+    // Touch support
+    let lastTouchDist = null;
+    container.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        lastTouchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+      } else if (e.touches.length === 1) {
+        this._sbDragging = true;
+        this._sbDragStart = { x: e.touches[0].clientX - this._sbPanX, y: e.touches[0].clientY - this._sbPanY };
+      }
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2 && lastTouchDist !== null) {
+        e.preventDefault();
+        const dist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const delta = dist / lastTouchDist;
+        this._sbZoom = Math.min(Math.max(this._sbZoom * delta, 0.25), 5);
+        lastTouchDist = dist;
+        applyTransform();
+      } else if (e.touches.length === 1 && this._sbDragging) {
+        this._sbPanX = e.touches[0].clientX - this._sbDragStart.x;
+        this._sbPanY = e.touches[0].clientY - this._sbDragStart.y;
+        applyTransform();
+      }
+    }, { passive: false });
+
+    container.addEventListener('touchend', () => {
+      this._sbDragging = false;
+      lastTouchDist = null;
+    });
+
+    // Zoom control buttons
+    const btnIn = document.getElementById('sandbox-zoom-in');
+    const btnOut = document.getElementById('sandbox-zoom-out');
+    const btnReset = document.getElementById('sandbox-zoom-reset');
+    if (btnIn) btnIn.addEventListener('click', () => { this._sbZoom = Math.min(this._sbZoom * 1.25, 5); applyTransform(); });
+    if (btnOut) btnOut.addEventListener('click', () => { this._sbZoom = Math.max(this._sbZoom * 0.8, 0.25); applyTransform(); });
+    if (btnReset) btnReset.addEventListener('click', () => { this._sbZoom = 1; this._sbPanX = 0; this._sbPanY = 0; applyTransform(); });
+
+    // Store applyTransform so reset can be called from outside
+    this._sbApplyTransform = applyTransform;
+  }
+
+  resetSandboxView() {
+    if (this._sbApplyTransform) {
+      this._sbZoom = 1; this._sbPanX = 0; this._sbPanY = 0;
+      this._sbApplyTransform();
+    }
   }
 
   toggleTheme() {

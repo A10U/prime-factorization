@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mathwizard Magic Academy — ต้นไม้ตัวประกอบ & สถาบันเวทมนตร์แห่งตัวเลข</title>
+  <meta name="description" content="เรียนรู้การแยกตัวประกอบเฉพาะและต้นไม้ตัวประกอบ (Prime Factorization & Factor Tree) แบบอินเตอร์แอคทีฟกับพ่อมดน้อยนัวและมิกซี่ พร้อมเชื่อมโยงกับตารางคู่">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-magic">
+
+  <!-- ==================== TOP HEADER ==================== -->
+  <header id="app-header">
+    <div class="brand-section">
+      <img src="assets/mascot.jpg" alt="Mascot Noir & Mixy" class="brand-avatar" id="brand-avatar" title="นัว & มิกซี่ (Noir & Mixy)">
+      <div class="brand-info">
+        <h1 class="brand-title">
+          ✨ Mathwizard Magic Academy <span class="brand-tag">Factor Tree & Prime Crystals</span>
+        </h1>
+      </div>
+    </div>
+
+    <!-- Interactive Progress Step Bar -->
+    <nav id="stage-progress" aria-label="ขั้นตอนการเรียนรู้"></nav>
+
+    <!-- Header Controls -->
+    <div class="header-controls">
+      <button id="btn-toggle-log" class="btn-pill" aria-label="เปิดหรือปิดคัมภีร์บันทึกขั้นตอน" title="คลิกเพื่อเปิด/ปิดคัมภีร์บันทึกขั้นตอน">
+        📜 คัมภีร์ขั้นตอน
+      </button>
+      <button id="btn-open-video-header" class="btn-pill btn-video-top" aria-label="ชมวิดีโอตัวอย่างการสอน">
+        🎬 ดูตัวอย่างการสอน
+      </button>
+      <button id="btn-sound-toggle" class="btn-pill" aria-label="เปิดหรือปิดเสียง">
+        🔊 เสียง: เปิด
+      </button>
+      <button id="btn-theme-toggle" class="btn-pill" aria-label="สลับธีมเวทมนตร์หรือไซไฟ">
+        🪄 โหมดเวทมนตร์
+      </button>
+      <button id="btn-settings" class="btn-icon" aria-label="ตั้งค่า AI API Key" title="ตั้งค่า Gemini API (ไม่จำเป็นต้องใส่)">
+        ⚙️
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== NOIR & MIXY AI COMPANION BAR ==================== -->
+  <aside id="ai-companion-bar" aria-label="บทสนทนาคู่หูเวทมนตร์ นัว & มิกซี่">
+    <div class="ai-avatar-box">
+      <img src="assets/mascot.jpg" alt="Noir & Mixy Mascot" class="ai-mascot-img" id="ai-mascot-img">
+      <div class="ai-mood-badge" id="ai-mood-badge">🐭</div>
+    </div>
+    <div class="ai-content">
+      <div class="ai-header-row">
+        <span class="ai-name">นัว & มิกซี่ (Noir & Mixy 🧙‍♂️🐭)</span>
+        <span class="ai-title-tag">AI Math Wizard Companion</span>
+      </div>
+      <div class="ai-dialogue" id="ai-dialogue-text">
+        สวัสดีจ้า! ข้าคือนัว พ่อมดน้อยแห่งสถาบันเวทมนตร์ และนี่คือมิกซี่หนูคู่หู! วันนี้เราจะพาเจ้าไปสำรวจความลับของต้นไม้ตัวประกอบกัน!
+      </div>
+    </div>
+    <button id="btn-toggle-companion" class="btn-toggle-mini" title="ย่อหรือขยายบทสนทนา" aria-label="ย่อหรือขยายบทสนทนา">
+      <span id="companion-toggle-label">▾ ย่อบทสนทนา</span>
+    </button>
+  </aside>
+
+  <!-- ==================== MAIN WORKSPACE ==================== -->
+  <main id="app-main">
+    <!-- 1. Left Sidebar: Magic Step Log (Collapsed by default) -->
+    <aside id="step-log-panel" class="collapsed">
+      <div class="panel-title-bar">
+        <span>📜 คัมภีร์บันทึกขั้นตอน</span>
+        <button id="btn-close-log" class="btn-close-panel" title="ย่อคัมภีร์" aria-label="ปิดคัมภีร์">✕</button>
+      </div>
+      <div id="log-entries" role="log" aria-live="polite" aria-label="บันทึกขั้นตอนการแก้โจทย์"></div>
+    </aside>
+
+    <!-- 2. Center Workspace: Tree Panel or Stage Content -->
+    <section id="workspace-area">
+      <!-- Factor Tree Visualization Panel -->
+      <div id="tree-panel" style="display:none">
+        <div class="tree-header-bar">
+          <span class="tree-title">🌿 ลานร่ายเวทย์ต้นไม้ตัวประกอบ (Horizontal Factor Tree)</span>
+          <div style="display:flex;align-items:center;gap:8px;margin-left:auto">
+            <button id="btn-focus-tree" class="btn-tree-focus" title="สลับโหมดขยายต้นไม้เต็มจอ">
+              <span id="focus-tree-label">⛶ ขยายเต็มจอ</span>
+            </button>
+            <span id="tree-n-badge" class="tree-n-badge"></span>
+          </div>
+        </div>
+        <div id="tree-canvas-wrap">
+          <div id="tree-empty-state">
+            <div class="tree-empty-icon">🌱</div>
+            <div>กดปุ่ม "ร่ายเวทย์แตกกิ่ง" ด้านล่างเพื่อเริ่มกำเนิดต้นไม้ตัวประกอบ</div>
+          </div>
+          <svg id="tree-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <!-- COUNT stage formula section will be dynamically injected here -->
+      </div>
+
+      <!-- Stage Content Wrap (PICK / PEEL / APPLY) -->
+      <div id="stage-content-wrap"></div>
+    </section>
+
+    <!-- 3. Right Sidebar: Divisor Pairs Mirror Table -->
+    <aside id="pair-panel" style="display:none">
+      <div class="pair-header-bar">⇄ กระจกตารางคู่ตรวจสอบ</div>
+      <div id="pair-table-entries" role="region" aria-label="ตารางคู่ตรวจสอบตัวประกอบ"></div>
+    </aside>
+  </main>
+
+  <!-- ==================== BOTTOM ACTION & SMART HINT BAR ==================== -->
+  <footer id="bottom-bar">
+    <div id="hint-ribbon">
+      <span class="hint-icon-box">💡</span>
+      <span id="hint-ribbon-text"></span>
+      <button id="btn-request-hint" class="btn-hint">💡 ขอคำใบ้จากมิกซี่</button>
+    </div>
+    <div id="action-bar"></div>
+  </footer>
+
+  <!-- ==================== MODAL: DOCTOR VIDEO GUIDE ==================== -->
+  <div class="modal-overlay" id="video-modal" role="dialog" aria-modal="true" aria-label="วิดีโอตัวอย่างการสอนโดย Doctor">
+    <div class="modal-dialog video-modal-dialog">
+      <div class="video-modal-header">
+        <div>
+          <div class="modal-title" style="margin-bottom:2px">🎬 วิดีโอต้นแบบการสอน: วิธีคิดต้นไม้ตัวประกอบ (Doctor's Method)</div>
+          <div style="font-size:12.5px;color:var(--text-muted)">รากฐานแนวคิด: สร้างความเข้าใจตัวประกอบเฉพาะผ่านต้นไม้และตารางคู่ ไม่ท่องสูตร แต่เข้าใจจริง</div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-video" aria-label="ปิดหน้าต่างวิดีโอ">✕</button>
+      </div>
+
+      <div class="video-frame-container">
+        <video id="doctor-video" controls playsinline preload="metadata">
+          <source src="assets/doctor_video.mp4" type="video/mp4">
+          เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอนี้
+        </video>
+      </div>
+
+      <div class="video-key-points">
+        <div class="vkp-title">📌 4 เสาหลักสำคัญจากวิดีโอต้นแบบ:</div>
+        <div class="vkp-grid">
+          <div class="vkp-item">
+            <span class="vkp-num">1</span>
+            <div><strong>ผ่าแยกผลึก (Peel)</strong> — เอาจำนวนเฉพาะมาหารจนเหลือ 1 ได้เลขชี้กำลัง $p^e$</div>
+          </div>
+          <div class="vkp-item">
+            <span class="vkp-num">2</span>
+            <div><strong>แตกกิ่งต้นไม้ (Tree)</strong> — เริ่มที่ 1 แล้วแตกกิ่งตามตัวเลือก $p^0, p^1, \dots, p^e$</div>
+          </div>
+          <div class="vkp-item">
+            <span class="vkp-num">3</span>
+            <div><strong>ยืนยันด้วยตารางคู่ (Pairs)</strong> — ปลายกิ่งตรงกับคู่คูณ $a \times b = n$ ครบถ้วน</div>
+          </div>
+          <div class="vkp-item">
+            <span class="vkp-num">4</span>
+            <div><strong>ที่มาของสูตร $(e+1)$</strong> — $+1$ มาจากกิ่ง $p^0=1$ (ทางเลือกที่ไม่หยิบ $p$ เลย)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: SETTINGS & GEMINI API ==================== -->
+  <div class="modal-overlay" id="settings-modal" role="dialog" aria-modal="true" aria-label="การตั้งค่า">
+    <div class="modal-dialog">
+      <div class="modal-title">⚙️ ตั้งค่า Gemini AI (ไม่จำเป็นต้องใส่)</div>
+      <div class="modal-field">
+        <label class="modal-label" for="api-key-input">Gemini API Key</label>
+        <input class="modal-input" type="password" id="api-key-input" placeholder="AIza..." autocomplete="off" spellcheck="false">
+        <div class="modal-hint">เก็บไว้ใน Session ของเบราว์เซอร์เท่านั้น · หากไม่ใส่ ระบบจะใช้ระบบคำใบ้อัจฉริยะในตัว</div>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="model-select">Gemini Model</label>
+        <select class="modal-input" id="model-select">
+          <option value="gemini-2.0-flash">gemini-2.0-flash (แนะนำ)</option>
+          <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+          <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+        </select>
+      </div>
+      <div class="modal-action-row">
+        <button class="btn btn-ghost" id="btn-modal-cancel">ยกเลิก</button>
+        <button class="btn btn-primary" id="btn-modal-save">บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script src="js/engine.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/companion.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
